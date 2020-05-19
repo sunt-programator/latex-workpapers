@@ -1,0 +1,38 @@
+\documentclass[tikz,border=10pt]{standalone}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\pgfmathsetmacro\radius{2}
+
+\foreach \rollAngle in {0.1,0.2,...,3.2}
+{
+	\begin{tikzpicture}
+		[
+			point/.style = {draw, circle, fill = black, inner sep = 1pt},
+			dot/.style   = {draw, circle, fill = black, inner sep = .2pt},
+			declare function = {
+				involute_x(\radius,\psi) = \radius * (cos(\psi) + \psi * sin(\psi));
+				involute_y(\radius,\psi) = \radius * (sin(\psi) - \psi * cos(\psi));
+			},
+		]
+		\begin{axis}[
+				trig format plots=rad,
+				axis equal,
+				axis lines=center,
+				grid=both,
+				xlabel=$x$, 
+				ylabel=$y$,
+				xmin=-5,xmax=5,
+				ymin=-3,ymax=7,
+			]
+			            
+			\coordinate (O) at (0,0);
+			\draw (O) circle[radius=\radius];
+			\addplot [domain=0:\rollAngle,samples=200, red]({involute_x(\radius, x)},{involute_y(\radius, x)});
+			            
+		\end{axis}
+	\end{tikzpicture}
+}
+\end{document}
