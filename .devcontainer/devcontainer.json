@@ -1,0 +1,18 @@
+{
+	"name": "LaTeX",
+	"dockerFile": "Dockerfile",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"latex-workshop.latex.watch.usePolling": true,
+		"latex-workshop.latex.autoBuild.run": "onFileChange",
+		"latex-workshop.latex.autoBuild.interval": 1000,
+		"latex-workshop.docker.enabled": false,
+	},
+	"extensions": [
+		"james-yu.latex-workshop"
+	],
+	"mounts": [
+	],
+	"remoteEnv": {
+	}
+}
