@@ -1,7 +1,6 @@
 \documentclass[tikz,border=10pt]{standalone}
 
 \usepackage{pgfplots,amsmath}
-\usetikzlibrary{angles,quotes}
 \pgfplotsset{compat=newest}
 
 \begin{document}
@@ -17,15 +16,15 @@
 % Styles
 \tikzstyle{information text}=[fill=red!10,inner sep=1ex]
 \pgfplotsset{
-   /pgf/number format/textnumber/.style={
-     fixed,
-     fixed zerofill,
-     precision=3,
-     1000 sep={,},
-     },
-  }
+	/pgf/number format/textnumber/.style={
+		fixed,
+		fixed zerofill,
+		precision=2,
+		1000 sep={,},
+	},
+}
 
-\foreach \rollAngle in {0.2,0.4,...,0.8}
+\foreach \rollAngle in {0.05,0.1,...,3.25}
 {
 	\begin{tikzpicture}
 		[
@@ -38,6 +37,11 @@
 				arcy(\radius,\b,\psi) = \b + \radius * sin(\psi);
 			},
 		]
+		
+		\pgfmathsetmacro\rollAngleDeg{deg(\rollAngle)}
+		\pgfmathsetmacro\arcLength{0.5 * \rollAngle * \radius^2}
+		\pgfmathsetmacro\curvature{1 / (\radius * \rollAngle)}
+		
 		\begin{axis}[
 				name=plotAxis,
 				trig format=rad,
@@ -48,42 +52,40 @@
 				ylabel=$y$,
 				xmin=-5,xmax=5,
 				ymin=-3,ymax=7,
+				xticklabels=\empty,
+				yticklabels=\empty,
 			]
-																					            
+								
 			\coordinate (O) at (0,0);
 			\coordinate (Or) at (\radius,0);
 			\coordinate (L1) at ({arcx(\radius,0,\rollAngle)},{arcy(\radius,0,\rollAngle)});
 			\coordinate (L2) at ({involutex(\radius,\rollAngle)},{involutey(\radius,\rollAngle)});
-						
+												
+			\addplot [domain=2*pi:\rollAngle,samples=200,remainingArcColor,thick,line cap=round]({arcx(\radius,0,x)},{arcy(\radius,0,x)});
 			\addplot [domain=0:\rollAngle,samples=200,dashedLineColor,dashed,line cap=round]({arcx(\radius,0,x)},{arcy(\radius,0,x)});
 			\addplot [domain=0.01:\rollAngle,samples=200,involuteSplineColor,thick,line cap=round]({involutex(\radius,x)},{involutey(\radius,x)});
-			\addplot [domain=2*pi:\rollAngle,samples=200,remainingArcColor,thick,line cap=round]({arcx(\radius,0,x)},{arcy(\radius,0,x)});
-																
-			\draw[dashedLineColor,dashed] (O) -- (L1) node [pos=0.5,sloped,above] {$r$};
 			\draw[tangentLineColor,thick] (L1) -- (L2);
 
-			% \pic [draw,"$\psi$"] {angle = L1--O--Or};
-												
+			\draw[dashedLineColor,dashed] (O) -- (L1) node [accentColor,pos=0.5,sloped,above] {$r$};
+			\addplot [domain=0:\rollAngle,samples=200,accentColor,line cap=round]({arcx(.4,0,x)},{arcy(.4,0,x)}) node[] at (.5, -.3) {$\psi$};
+																						
+			
 		\end{axis}
-
+				
 		\node [xshift=.5cm,below right,align=center,text width=6cm,style=information text] at (plotAxis.north east)
 		{
-			\pgfmathsetmacro\rollAngleDeg{deg(\rollAngle)}
-			\pgfmathsetmacro\arcLength{0.5 * \rollAngle * \radius^2}
-			\pgfmathsetmacro\curvature{1 / (\radius * \rollAngle)}
-
-			This is a demonstration how the {\color{accentColor} involute of a circle} work.
+			This is a demonstration how the {\color{accentColor} involute of a circle} works.
 			So, {\color{accentColor} $r$} is radius of the circle, {\color{accentColor} $\psi$} --- roll angle,
 			{\color{accentColor} $L$} --- arc length and {\color{accentColor} $k$} -- curvature of
 			the involute.
 			\begin{align*}
-				{\color{accentColor} r} &= const & &= \radius \\
-				{\color{accentColor} \psi} &= \pgfmathprintnumber[textnumber]{\rollAngle}\text{ rad}  & &\approx \pgfmathprintnumber[textnumber]{\rollAngleDeg}^\circ \\
-				{\color{accentColor} L} &= \frac{1}{2} \psi r^2 & &\approx \pgfmathprintnumber[textnumber]{\arcLength} \\
-				{\color{accentColor} \kappa} &= \frac{1}{\psi r} & &\approx \pgfmathprintnumber[textnumber]{\curvature}
+				{\color{accentColor} r}      & = const                                                  &   & = \radius                                                    \\
+				{\color{accentColor} \psi}   & = \pgfmathprintnumber[textnumber]{\rollAngle}\text{ rad} &   & \approx \pgfmathprintnumber[textnumber]{\rollAngleDeg}^\circ \\
+				{\color{accentColor} L}      & = \frac{1}{2} \psi r^2                                   &   & = \pgfmathprintnumber[textnumber]{\arcLength}                \\
+				{\color{accentColor} \kappa} & = \frac{1}{\psi r}                                       &   & \approx \pgfmathprintnumber[textnumber]{\curvature}          
 			\end{align*}
 		};
-
+				
 	\end{tikzpicture}
 }
 \end{document}
