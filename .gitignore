@@ -283,3 +283,8 @@ TSWLatexianTemp*
 # Other formats
 *.pdf
 *.gif
+
+# Other
+involute-of-circle/**/*.png
+involute-of-circle/**/*.mp4
+involute-of-circle/**/*.gif

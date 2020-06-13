@@ -9,7 +9,8 @@
 		"latex-workshop.docker.enabled": false,
 	},
 	"extensions": [
-		"james-yu.latex-workshop"
+		"james-yu.latex-workshop",
+		"adam-bender.commit-message-editor"
 	],
 	"mounts": [
 	],
